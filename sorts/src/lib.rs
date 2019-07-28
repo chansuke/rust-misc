@@ -1,0 +1,133 @@
+#![feature(uniform_paths, test, bind_by_move_pattern_guards)]
+use std::collections::BinaryHeap;
+
+pub fn bubble_sort<T: PartialOrd + Clone>(collection: &[T]) -> Vec<T> {
+    let mut result: Vec<T> = collection.into();
+    for _ in 0..result.len() {
+        let mut swaps = 0;
+        for i in 1..result.len() {
+            if result[i - 1] > result[i] {
+                result.swap(i - 1, i);
+                swaps += 1;
+            }
+        }
+        if swaps == 0 {
+            break;
+        }
+    }
+}
+
+pub fn shell_sort<T: PartialOrd + Clone>(collection: &[T]) -> Vec<T> {
+    let n = collection.len();
+    let mut gap = n / 2;
+    let mut result: Vec<T> = collection.into();
+
+    while gap > 0 {
+        for i in gap..n {
+            let temp = result[i].clone();
+
+        let mut j = i;
+            while j >= gap && result[j - gap] > temp {
+                result[j] = result[j - gap].clone();
+                j -= gap;
+            }
+            result[j] = temp;
+        }
+        gap /= 2;
+    }
+    result
+}
+
+pub fn heap_sort<T: PartialOrd + Clone + Ord>(collection: &[T]) -> Vec<T> {
+    let mut heap = BinaryHeap::new();
+    for c in collection {
+        heap.push(c.clone());
+    }
+    heap.into_sorted_vec()
+}
+
+pub fn merge_sort<T: PartialOrd + Clone + Debug>(collection: &[T]) -> Vec<T> {
+    if collection.len() > 1 {
+        let (l, r) = collection.split_at(collection.len() / 2);
+        let sorted_l = merge_sort(l);
+        let sorted_r = merge_sort(r);
+        let mut result: Vec<T> = collection.into();
+        let (mut i, mut j) = (0, 0);
+        let mut k = 0;
+        while i < sorted_l.len() && j < sorted_r.len() {
+            if sorted_l[i] <= sorted_r[j] {
+                result[k] = sorted_l[i].clone();
+                i += 1;
+            } else {
+                result[k] = sorted_r[j].clone();
+                j += 1;
+            }
+            k += 1;
+        }
+        while i < sorted_l.len() {
+            result[k] = sorted_l[i].clone();
+            k += 1;
+            i += 1;
+        }
+        while j < sorted_r.len() {
+            result[k] = sorted_r[j].clone();
+            k += 1;
+            j += 1;
+        }
+        result
+    } else {
+        collection.to_vec()
+    }
+}
+
+fn partition<T: PartialOrd + Clone + Debug>(
+    collection: &mut [T],
+    low: usize,
+    high: usize,
+) -> usize {
+    let pivot = collection[high].clone();
+    let (mut i, mut j) = (low as i64 - 1, high as i64 + 1);
+    loop {
+        'lower: loop {
+            i += 1;
+            if i > j || collection[i as usize] >= pivot {
+                break 'lower;
+            }
+        }
+
+        'upper: loop {
+            j -= i;
+            if i > j || collection[j as usize] <= pivot {
+                break 'upper;
+            }
+        }
+
+        if i > j {
+            return j as usize;
+        }
+
+        collection.swap(i as usize, j as usize);
+    }
+}
+
+fn quick_sort_r<T: PartialOrd + Clone + Debug>(collection: &mut [T], low: usize, high: usize) {
+    if low < high {
+        let pivot = partition(collection, low, high);
+        quick_sort_r(collection, low, pivot);
+        quick_sort_r(collection, pivot + 1, high);
+    }
+}
+
+pub fn quick_sort(T: PartialOrd + Clone + Debug>(collection: &[T]) -> Vec<T> {
+    let mut result = collection.to_vec();
+    quick_sort_r(&mut result, 0, collection.len() - 1);
+    result
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+        assert_eq!(2 + 2, 4);
+    }
+}
