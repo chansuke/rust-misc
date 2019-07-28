@@ -2,7 +2,7 @@ use crate::LocationInformation;
 
 type Entry<K, V> = Vec<(K, V)>;
 
-pub type LocationCache = HashMap<String, LocationInformation>;
+pub type MemberCache = HashMap<String, OfficialMember>;
 
 pub struct HashMap<K, V>
 where
