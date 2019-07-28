@@ -1,0 +1,12 @@
+error[E0658]: use of unstable library feature 'maybe_uninit'
+ --> <anon>:3:9
+  |
+3 |     use std::mem::MaybeUninit;
+  |         ^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: for more information, see https://github.com/rust-lang/rust/issues/53491
+  = help: add #![feature(maybe_uninit)] to the crate attributes to enable
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0658`.
