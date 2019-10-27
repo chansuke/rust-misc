@@ -27,7 +27,6 @@ fn main() {
         weak,
     );
 
-    // WeakをRcにアップグレードするとChild値にアクセスできる
     if let Some(rc3) = weak.upgrade() {
         println!(
             "(f) count: {}, rc1: {:?}, rc3: {:?}",
@@ -36,8 +35,6 @@ fn main() {
             rc3,
         );
     }
-
-    // rc1をドロップする（スコープを抜けたのと同じ） 参照カウントが0になりChildは破棄される
     std::mem::drop(rc1);
     println!("(g) count: 0, weak.upgrade(): {:?}", weak.upgrade());
 }
