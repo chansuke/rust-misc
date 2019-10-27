@@ -1,3 +1,26 @@
+#[macro_use]
+extern crate lazy_static;
+extern crate regex;
+extern crate rand;
+extern crate futures;
+extern crate tokio;
+extern crate hyper;
+extern crate hyper_staticfile;
+
+use std::io::{Error, ErrorKind};
+use std::fs;
+use std::path::Path;
+use regex::Regex;
+use rand::{thread_rng, Rng};
+use rand::distributions::Alphanumeric;
+use futures::{future, Future, Stream};
+use tokio::fs::File;
+use hyper::{Body, Method, Request, Response, Server, StatusCode};
+use hyper::service::service_fn;
+use hyper_staticfile::FileChunkStream;
+
+static INDEX: &[u8] = b"Images Handler";
+
 fn image_handler(req: Request<Body>, files: &Path) -> Box<Future<Item=Response<Body>, Error=Error> + Send> {
     match (req.method(), req.uri().path().to_owned().as_ref()) {
         (&Method::GET, "/") => {
