@@ -9,4 +9,4 @@ edition = "2018"
 [dependencies]
 slab = "0.4"
 futures = "0.1"
-hyper = "0.12"
+hyper = "0.14"
